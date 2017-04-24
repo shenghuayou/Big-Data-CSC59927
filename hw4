@@ -1,0 +1,21 @@
+data address:
+/user/syou000/weather-data
+/user/syou000/MTA-dataset
+
+group members:
+syou000
+vfung000
+yling001
+
+give permission to group members and professor:
+hadoop fs -setfacl -R -m user:vfung000:rwx /user/syou000
+hadoop fs -setfacl -R -m user:vfung000:rwx /user/syou000/weather-data
+hadoop fs -setfacl -R -m user:vfung000:rwx /user/syou000/MTA-dataset
+hadoop fs -setfacl -R -m user:yling001:rwx /user/syou000/weather-data
+hadoop fs -setfacl -R -m user:yling001:rwx /user/syou000/MTA-dataset
+hadoop fs -setfacl -R -m user:hvo:rwx /user/syou000/weather-data
+hadoop fs -setfacl -R -m user:hvo:rwx /user/syou000/MTA-dataset
+
+
+command to copy large files from local to HDFS:
+hadoop fs -copyFromLocal /path/in/linux /hdfs/path
