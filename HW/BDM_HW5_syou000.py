@@ -58,14 +58,26 @@ if __name__=='__main__':
     rdd1 = yellow.mapPartitionsWithIndex(mapper1)
     cb = sc.textFile('hdfs:///scratch/share/citibike.csv')    
     rdd2 = cb.mapPartitionsWithIndex(mapper2)
-    rdd3 = rdd2.cartesian(rdd1) \
-               .filter(lambda x:
-                    (hms_to_seconds(x[0][0]) - hms_to_seconds(x[1][0]) >= 0) 
-                    and
-                    (hms_to_seconds(x[0][0]) - hms_to_seconds(x[1][0]) <= 600) 
-                    and 
-                    (haversine(float(x[0][2]), float(x[0][1]), float(x[1][2]), float(x[1][1])) <= 0.25)) \
-                    .count()
+
+    rdd1_collect = rdd1.collect()
+    rdd2_collect = rdd2.collect()
+
+    # rdd3 = rdd2.cartesian(rdd1) \
+    #            .filter(lambda x:
+    #                 (hms_to_seconds(x[0][0]) - hms_to_seconds(x[1][0]) >= 0) 
+    #                 and
+    #                 (hms_to_seconds(x[0][0]) - hms_to_seconds(x[1][0]) <= 600) 
+    #                 and 
+    #                 (haversine(float(x[0][2]), float(x[0][1]), float(x[1][2]), float(x[1][1])) <= 0.25)) \
+    #                 .count()
+    count = 0
+    for i in rdd2_collect:
+        for j in rdd1_collect:
+            if (hms_to_seconds(i[0]) - hms_to_seconds(j[0]) >= 0) and \
+            (hms_to_seconds(i[0]) - hms_to_seconds(j[0]) <= 600) and \
+            (haversine(float(i[2]), float(i[1]), float(j[2]), float(j[1])) <= 0.25):
+                count = count + 1
+                break
 
 
-    print rdd3
+    print count

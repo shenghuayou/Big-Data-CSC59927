@@ -1,0 +1,3 @@
+spark-submit --name "BDM_HW5_syou000" \
+              --files hdfs:///scratch/share/yellow.csv.gz,hdfs:///scratch/share/citibike.csv \
+                hdfs:///user/syou000/BDM_HW5_syou000.py \
